@@ -7,7 +7,7 @@ const authentication = (req, res, next) => {
       return res.status(403).json({ message: "No token provided" });
     }
 
-    const decode = jwt.verify(token, 'hululu');
+    const decode = jwt.verify(token, process.env.Secret);
     req.user = decode;  
     next(); 
   } catch (err) {

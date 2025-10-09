@@ -101,9 +101,7 @@ route.post("/login", async (req, res) => {
     {
       username: username,
       email: userfind.email,
-    },
-    "hululu"
-  );
+    },process.env.Secret);
   res.cookie("token", token, {
     httpOnly: true, // prevents JS access (better security)
     maxAge: 100 * 10000,
