@@ -58,10 +58,10 @@ route.post("/signup", async (req, res) => {
 
 route.post("/verify", async (req, res) => {
 
-  const { otp } = req.body;
+  const { otp,email } = req.body;
 
   try {
-    const user = await data.findOne();
+    const user = await data.findOne({email:email});
      console.log(user)
     if (!user.email) {
       return res.status(404).json({ message: "User not found" });
@@ -82,6 +82,41 @@ route.post("/verify", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
+route.post('/resend', async (req,res)=>{
+    const {email}=req.body;
+const save=data.create({
+
+  otp:otp,
+ otpexpire:expire
+});
+
+   const mail = nodemailer.createTransport({
+      service: "gmail",
+      secure: true,
+      port: 465,
+      auth: {
+        user: "arixsontechnologies@gmail.com",
+        pass: "fnwg uwru ehmf znlb",
+      },
+    });
+
+    const receiver = {
+      from: "arixsontechnologies",
+      to: email,
+      subject: "this otp verification code ",
+      text: `your otp is ${otp} `,
+    };
+
+    await mail.sendMail(receiver, (error, emailresponse) => {
+      if (error) {
+        throw error;
+      }
+      console.log("sucess");
+    });
+res.send('send otp')
+    
+})
 
 route.post("/login", async (req, res) => {
   const { username, password} = req.body;
