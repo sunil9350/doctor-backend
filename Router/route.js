@@ -34,7 +34,7 @@ route.post("/signup", async (req, res) => {
     });
 
     const receiver = {
-      from: "arixsontechnologies",
+      from: "arixsontechnologies@gmail.com",
       to: email,
       subject: "this otp verification code ",
       text: `your otp is ${otp} `,
