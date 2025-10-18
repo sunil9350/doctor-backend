@@ -130,7 +130,7 @@ route.post("/login", async (req, res) => {
       .status(401)
       .json({ message: "email and password is incorrrrrrect" });
   }
-  const decode = await bcrypt.compare(password, userfind.password);
+  const decode = await bcrypt.compare(password, emailfind.password);
   if (!decode) {
     return res
       .status(402)
@@ -138,8 +138,8 @@ route.post("/login", async (req, res) => {
   }
   const token = jwt.sign(
     {
-      username: username,
-      email: userfind.email,
+      username: emailfind.username,
+      email: emailfind.email,
     },process.env.Secret);
   res.cookie("token", token, {
     httpOnly: true, // prevents JS access (better security)
