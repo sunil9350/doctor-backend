@@ -10,7 +10,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://doctor-42p9.onrender.com",
     credentials: true,
   })
 );

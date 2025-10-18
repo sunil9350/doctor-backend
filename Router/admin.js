@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { HttpStatusCode } = require("axios");
 const authentication = require("../auth/userauth");
+const doctordata = require("../models/doctorSchema");
 
 send.post("/signup", async (req, res) => {
   try {
@@ -60,7 +61,7 @@ send.post("/login", async (req, res) => {
     );
 
     res.cookie("token", token);
-     console.log(token)
+    console.log(token);
     res.send("login sucessfull");
   } catch (error) {
     console.error("Login error:", error);
@@ -68,8 +69,24 @@ send.post("/login", async (req, res) => {
   }
 });
 
-send.get('/registerdoctors',authentication,(req,res)=>{
-   res.send('hello')
-})
+send.post("/registerdoctors", authentication, async (req, res) => {
+  const { speciality, name, degree, Experience, About, Fee, Address } =
+    req.body;
+  const count = await doctordata.countDocuments();
+  const doctorId = `DOC${(count + 1).toString().padStart(4, "0")}`;
+  await doctordata.create({
+    doctorId: doctorId,
+    speciality,
+    name,
+    degree,
+    Experience,
+    About,
+    Fee,
+    Address,
+  });
+  console.log(req.body);
+  const doctor = await doctordata.findOne({ doctorId });
+  res.send(doctor);
+});
 
 module.exports = send;
