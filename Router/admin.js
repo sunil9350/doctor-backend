@@ -4,7 +4,7 @@ const admin = require("../models/admin");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { HttpStatusCode } = require("axios");
-const adminauth = require("../Module/admin");
+const authentication = require("../auth/userauth");
 
 send.post("/signup", async (req, res) => {
   try {
@@ -68,9 +68,8 @@ send.post("/login", async (req, res) => {
   }
 });
 
-send.get('/profile',adminauth,(req,res)=>{
-      console.log('hello')
-      res.send('hello world')
+send.get('/registerdoctors',authentication,(req,res)=>{
+   res.send('hello')
 })
 
 module.exports = send;

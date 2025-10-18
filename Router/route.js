@@ -6,8 +6,9 @@ const data = require("../models/userdata");
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
-const authentication = require("../Module/userauth");
+const authentication = require("../auth/userauth");
 const { set } = require("mongoose");
+const e = require("express");
 route.post("/signup", async (req, res) => {
   const { username, email, password } = req.body;
   const otp = crypto.randomInt(100000, 999999).toString();
@@ -147,7 +148,13 @@ route.post("/login", async (req, res) => {
   });
   console.log(token);
 
-  res.status(200).json({ msg: 'login sucessfull',data:emailfind.username });
+res.status(200).json({
+  msg: 'login successful',
+  data: {
+    username: emailfind.username,
+    email: emailfind.email
+  }
+});
 });
 
 route.post("/profile", authentication, async (req, res) => {
@@ -167,6 +174,7 @@ route.post("/profile", authentication, async (req, res) => {
       return res.status(404).json({ msg: "User not found" });
     }
   res.status(200).json({msg:"update sucessfull",updateddata:updata});
+  
 });
 route.get("/logout", (req, res) => {
   const logout = res.clearCookie("token");
