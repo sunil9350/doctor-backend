@@ -84,12 +84,16 @@ route.post("/verify", async (req, res) => {
 });
 
 route.post('/resend', async (req,res)=>{
-    const {email}=req.body;
-const save=data.create({
 
-  otp:otp,
- otpexpire:expire
-});
+    const {email}=req.body;
+    const otp = crypto.randomInt(100000, 999999).toString();
+   const expire = Date.now() + 10 * 60 * 1000;
+   console.log(expire)
+await data.updateOne(
+  { email: email },
+  { $set: { otp:otp,  otpexpire:expire } },
+  { upsert: true }
+);
 
    const mail = nodemailer.createTransport({
       service: "gmail",
@@ -114,17 +118,17 @@ const save=data.create({
       }
       console.log("sucess");
     });
-res.send('send otp')
+res.send('resend otp')
     
 })
 
 route.post("/login", async (req, res) => {
-  const { username, password} = req.body;
-  const userfind = await data.findOne({ username: username });
-  if (!userfind) {
+  const { email, password} = req.body;
+  const emailfind = await data.findOne({ email: email });
+  if (!emailfind) {
     return res
       .status(401)
-      .json({ message: "username and password is incorrrrrrect" });
+      .json({ message: "email and password is incorrrrrrect" });
   }
   const decode = await bcrypt.compare(password, userfind.password);
   if (!decode) {
