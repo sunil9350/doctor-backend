@@ -147,7 +147,7 @@ route.post("/login", async (req, res) => {
   });
   console.log(token);
 
-  res.status(200).json({ msg: "login sucessfull" });
+  res.status(200).json({ msg: 'login sucessfull',data:emailfind.username });
 });
 
 route.post("/profile", authentication, async (req, res) => {
@@ -160,10 +160,13 @@ route.post("/profile", authentication, async (req, res) => {
   const updata = await data.findOneAndUpdate(
     { email: email },
 
-    { $set: { phone, address, gender, age } }
+    { $set: { phone, address, gender, age } },
+         { new: true }
   );
-
-  res.send("data update sucessfully");
+      if (!updata) {
+      return res.status(404).json({ msg: "User not found" });
+    }
+  res.status(200).json({msg:"update sucessfull",updateddata:updata});
 });
 route.get("/logout", (req, res) => {
   const logout = res.clearCookie("token");
