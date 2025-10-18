@@ -173,7 +173,13 @@ route.post("/profile", authentication, async (req, res) => {
       if (!updata) {
       return res.status(404).json({ msg: "User not found" });
     }
-  res.status(200).json({msg:"update sucessfull",updateddata:updata});
+  res.status(200).json({msg:"update sucessfull",updateddata:{
+    address:updata.address,
+    phone:updata.phone,
+    age:updata.age,
+    gender:updata.gender
+  
+  }});
   
 });
 route.get("/logout", (req, res) => {
