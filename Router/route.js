@@ -143,7 +143,7 @@ route.post("/login", async (req, res) => {
       email: emailfind.email,
     },process.env.Secret);
   res.cookie("token", token, {
-    httpOnly: true, // prevents JS access (better security)
+    httpOnly: true,
     maxAge: 100 * 10000,
   });
   console.log(token);
