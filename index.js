@@ -8,14 +8,25 @@ const cors = require("cors");
 require("dotenv").config();
 app.use(cookieParser());
 app.use(express.json());
+const allowedOrigins = [
+  "https://doctor-42p9.onrender.com", // production
+  "http://localhost:5173",            // local dev
+];
 app.use(
   cors({
-    origin: "https://doctor-42p9.onrender.com",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
 app.use(express.urlencoded({ extended: true }));
 app.use("/", route);
 app.use("/admin", send);
