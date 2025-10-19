@@ -144,7 +144,7 @@ route.post("/login", async (req, res) => {
     },process.env.Secret);
   res.cookie("token", token, {
     httpOnly: true,
-    maxAge: 100 * 10000,
+     sameSite: "None",
   });
   console.log(token);
 
