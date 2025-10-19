@@ -12,6 +12,8 @@ app.use(
   cors({
     origin: "https://doctor-42p9.onrender.com",
     credentials: true,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(express.urlencoded({ extended: true }));

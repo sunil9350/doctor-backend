@@ -84,9 +84,31 @@ send.post("/registerdoctors", authentication, async (req, res) => {
     Fee,
     Address,
   });
-  console.log(req.body);
   const doctor = await doctordata.findOne({ doctorId });
-  res.send(doctor);
+  res.status(200).json({doctor})
 });
+
+send.get('/doctor/:speciality', async(req,res)=>{
+      try{
+      const {speciality}=req.params;    
+      console.log(speciality)  
+          const allowedSpecialities = ['general', 'dematology'];
+
+    if (!allowedSpecialities.includes(speciality.toLowerCase())) {
+      return res.status(400).json({ msg: "Invalid speciality" });
+    }
+      const data=await doctordata.find({speciality:speciality})
+      if(!data ||data.lenght===0){
+            return res.status(403).json({msg:"Doctor from this speciality not found"})
+      }
+      res.json(data);
+      }
+      catch(err){
+       console.log(err);
+      }
+})
+
+
+
 
 module.exports = send;
